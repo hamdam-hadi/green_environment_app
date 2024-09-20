@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"green_environment_app/models"
 	"green_environment_app/services"
 	"green_environment_app/utils"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -24,21 +26,63 @@ func NewChallengeController(cs services.ChallengeService) *ChallengeController {
 }
 
 func (cc *ChallengeController) GetChallengeByID(c echo.Context) error {
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid ID"})
+	}
 
-	return c.JSON(http.StatusOK, "Challenge details")
+	challenge, err := cc.ChallengeService.GetChallengeByID(uint(id))
+	if err != nil {
+		return c.JSON(http.StatusNotFound, map[string]string{"message": "Challenge not found"})
+	}
+
+	return c.JSON(http.StatusOK, challenge)
 }
 
 func (cc *ChallengeController) CreateChallenge(c echo.Context) error {
+	var challenge models.Challenge
+	if err := c.Bind(&challenge); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request body"})
+	}
 
-	return c.JSON(http.StatusCreated, "Challenge created")
+	if err := cc.ChallengeService.CreateChallenge(&challenge); err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to create challenge"})
+	}
+
+	return c.JSON(http.StatusCreated, challenge)
 }
 
 func (cc *ChallengeController) UpdateChallenge(c echo.Context) error {
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid ID"})
+	}
 
-	return c.JSON(http.StatusOK, "Challenge updated")
+	var challenge models.Challenge
+	if err := c.Bind(&challenge); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request body"})
+	}
+
+	challenge.ID = uint(id)
+	if err := cc.ChallengeService.UpdateChallenge(&challenge); err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to update challenge"})
+	}
+
+	return c.JSON(http.StatusOK, challenge)
 }
 
 func (cc *ChallengeController) DeleteChallenge(c echo.Context) error {
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid ID"})
+	}
 
-	return c.JSON(http.StatusOK, "Challenge deleted")
+	if err := cc.ChallengeService.DeleteChallenge(uint(id)); err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to delete challenge"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Challenge deleted successfully"})
 }
