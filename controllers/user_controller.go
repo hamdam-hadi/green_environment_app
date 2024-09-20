@@ -5,6 +5,7 @@ import (
 	"green_environment_app/services"
 	"green_environment_app/utils"
 	"net/http"
+
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -30,7 +31,20 @@ func (uc *UserController) RegisterUser(c echo.Context) error {
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request payload"})
 	}
-	return c.JSON(http.StatusCreated, "User registered")
+	hashedPassword, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "couldn't hash password"})
+	}
+	user.Password = hashedPassword
+
+	err = uc.UserService.Register(&user)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "failed to register a user"})
+
+	}
+	return c.JSON(http.StatusCreated, map[string]interface{}{
+		"message": "Registered successfully", "user": user,
+	})
 }
 
 func (uc *UserController) LoginUser(c echo.Context) error {
@@ -41,7 +55,24 @@ func (uc *UserController) LoginUser(c echo.Context) error {
 	if err := c.Bind(&loginRequest); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "invalid request"})
 	}
-	return c.JSON(http.StatusOK, "User logged in")
+	user, err := uc.UserService.Login(loginRequest.Email)
+	if err != nil || !utils.CheckPasswordHash(loginRequest.Password, user.Password) {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"message": "invalid email or password"})
+	}
+	jwtOptions := models.JWTOptions{
+		SecretKey:       utils.GetConfig("SECRET_KEY"),
+		ExpiresDuration: 72,
+	}
+	token, err := utils.GenerateJWT(int(user.ID), jwtOptions)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "couldn't gnerate token"})
+
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "login successful",
+		"token":   token,
+		"user":    user,
+	})
 
 }
 
@@ -57,6 +88,18 @@ func (uc *UserController) GetUserByID(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "User details fetched successfully", "user": user,
+	})
+}
+
+func (uc *UserController) GetUserByEmail(c echo.Context) error {
+	email := c.Param("email")
+	user, err := uc.UserService.Login(email)
+	if err != nil {
+		return c.JSON(http.StatusNotFound, map[string]string{"message": "invalid email address"})
+
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "User details found seccessfully", "user": user,
 	})
 }
 
@@ -76,17 +119,4 @@ func (uc *UserController) UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to update user"})
 	}
 	return c.JSON(http.StatusOK, map[string]string{"message": "User updated successfully"})
-}
-
-func (uc *UserController) DeleteUser(c echo.Context) error {
-	idParam := c.Param("id")
-	id, err := strconv.ParseUint(idParam, 10, 32)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid user ID"})
-	}
-	err = uc.UserService.DeleteUser(uint(id))
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to delete user"})
-	}
-	return c.JSON(http.StatusOK, map[string]string{"message": "User deleted successfully"})
 }

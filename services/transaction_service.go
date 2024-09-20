@@ -8,10 +8,12 @@ import (
 // TransactionService defines methods to interact with transaction-related operations
 type TransactionService interface {
 	CreateTransaction(transaction *models.Transaction) error
-	GetAllTransactions() ([]models.Transaction, error)
+	GetTransactionByID(id uint) (*models.Transaction, error)
+	UpdateTransaction(transaction *models.Transaction) error
+	DeleteTransaction(id uint) error
 }
 
-// transactionService implements TransactionService interface
+// transactionService implements the TransactionService interface
 type transactionService struct {
 	repo repositories.TransactionRepository
 }
@@ -25,6 +27,14 @@ func (s *transactionService) CreateTransaction(transaction *models.Transaction) 
 	return s.repo.Save(transaction)
 }
 
-func (s *transactionService) GetAllTransactions() ([]models.Transaction, error) {
-	return s.repo.FindAll()
+func (s *transactionService) GetTransactionByID(id uint) (*models.Transaction, error) {
+	return s.repo.FindByID(id)
+}
+
+func (s *transactionService) UpdateTransaction(transaction *models.Transaction) error {
+	return s.repo.Update(transaction)
+}
+
+func (s *transactionService) DeleteTransaction(id uint) error {
+	return s.repo.Delete(id)
 }
