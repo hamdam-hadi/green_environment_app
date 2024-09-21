@@ -1,3 +1,4 @@
+// user_controller.go
 package controllers
 
 import (
@@ -5,7 +6,6 @@ import (
 	"green_environment_app/services"
 	"green_environment_app/utils"
 	"net/http"
-
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -40,7 +40,6 @@ func (uc *UserController) RegisterUser(c echo.Context) error {
 	err = uc.UserService.Register(&user)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "failed to register a user"})
-
 	}
 	return c.JSON(http.StatusCreated, map[string]interface{}{
 		"message": "Registered successfully", "user": user,
@@ -49,31 +48,34 @@ func (uc *UserController) RegisterUser(c echo.Context) error {
 
 func (uc *UserController) LoginUser(c echo.Context) error {
 	var loginRequest struct {
-		Email    string `json:"emial"`
+		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
 	if err := c.Bind(&loginRequest); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "invalid request"})
 	}
+
 	user, err := uc.UserService.Login(loginRequest.Email)
 	if err != nil || !utils.CheckPasswordHash(loginRequest.Password, user.Password) {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"message": "invalid email or password"})
 	}
-	jwtOptions := models.JWTOptions{
+
+	// Use utils.JWTOptions directly instead of models.JWTOptions
+	jwtOptions := utils.JWTOptions{
 		SecretKey:       utils.GetConfig("SECRET_KEY"),
-		ExpiresDuration: 72,
+		ExpiresDuration: 72, // Set token expiration duration in hours
 	}
+
+	// Generate the JWT using the utils package
 	token, err := utils.GenerateJWT(int(user.ID), jwtOptions)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "couldn't gnerate token"})
-
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "couldn't generate token"})
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "login successful",
 		"token":   token,
 		"user":    user,
 	})
-
 }
 
 func (uc *UserController) GetUserByID(c echo.Context) error {
@@ -96,10 +98,9 @@ func (uc *UserController) GetUserByEmail(c echo.Context) error {
 	user, err := uc.UserService.Login(email)
 	if err != nil {
 		return c.JSON(http.StatusNotFound, map[string]string{"message": "invalid email address"})
-
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "User details found seccessfully", "user": user,
+		"message": "User details found successfully", "user": user,
 	})
 }
 

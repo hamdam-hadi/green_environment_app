@@ -1,14 +1,19 @@
+// utils/generate_jwt.go
 package utils
 
 import (
 	"green_environment_app/middleware"
-	"green_environment_app/models"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(userID int, jwtOptions models.JWTOptions) (string, error) {
+type JWTOptions struct {
+	ExpiresDuration int
+	SecretKey       string
+}
+
+func GenerateJWT(userID int, jwtOptions JWTOptions) (string, error) {
 	expire := jwt.NewNumericDate(time.Now().Local().Add(time.Hour * time.Duration(int64(jwtOptions.ExpiresDuration))))
 
 	claims := &middleware.JWTCustomClaims{
@@ -21,7 +26,6 @@ func GenerateJWT(userID int, jwtOptions models.JWTOptions) (string, error) {
 	rawToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	token, err := rawToken.SignedString([]byte(jwtOptions.SecretKey))
-
 	if err != nil {
 		return "", err
 	}
