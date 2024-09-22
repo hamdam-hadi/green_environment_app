@@ -38,5 +38,6 @@ func InitializeRoutes(e *echo.Echo, userController *controllers.UserController, 
 	e.DELETE("/rewards/:id", rewardController.DeleteReward, middleware.JWTWithConfig(rewardController.JWTConfig))
 
 	//routes for user by email
-	e.GET("/users/email/:email", userController.GetUserByEmail)
+	e.GET("/users/email/:email", userController.GetUserByEmail, middleware.JWTWithConfig(userController.JWTConfig))
+
 }
