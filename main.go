@@ -3,15 +3,16 @@ package main
 import (
 	"fmt"
 	"green_environment_app/controllers"
+	"green_environment_app/models"
 	"green_environment_app/repositories"
 	"green_environment_app/routes"
 	"green_environment_app/services"
 	"green_environment_app/utils"
+
 	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -46,6 +47,21 @@ func main() {
 		}
 		sqlDB.Close()
 	}()
+	err = db.AutoMigrate(
+		&models.User{},
+		&models.Product{},
+		&models.Transaction{},
+		&models.Challenge{},
+		&models.Reward{},
+		&models.Leaderboard{},
+		&models.Information{},
+		&models.Discussion{},
+	)
+	if err != nil {
+		log.Fatalf("Error migrating models: %v", err)
+	}
+
+	log.Println("Database migrated successfully")
 
 	// Initialize repositories and services
 	userRepo := repositories.NewUserRepository(db)
@@ -67,10 +83,14 @@ func main() {
 	e := echo.New()
 
 	// Apply JWT middleware globally
-	e.Use(middleware.JWT([]byte(utils.GetConfig("SECRET_KEY"))))
+	e.POST("/login", login)
 
 	// Login route (no JWT needed for this route)
-	e.POST("/login", login)
+	//authconfig := middleware.JWTConfig{
+	//	SecretKey: utils.GetConfig("SECRET_KEY"),
+	//}
+
+	//e.Use(echojwt.WithConfig(authconfig.Init()))
 
 	// Initialize routes
 	routes.InitializeRoutes(e, userController, productController, challengeController, rewardController)
