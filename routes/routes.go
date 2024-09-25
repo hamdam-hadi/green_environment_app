@@ -50,6 +50,4 @@ func InitializeRoutes(e *echo.Echo, userController *controllers.UserController, 
 	rewardroutes.PUT("/:id", rewardController.UpdateReward)
 	rewardroutes.DELETE("/:id", rewardController.DeleteReward)
 
-	//routes for user by email
-
 }
