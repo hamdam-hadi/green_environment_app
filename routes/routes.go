@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-// InitializeRoutes sets up all routes for the application
+// Initializing and seeting up all routes for the application
 func InitializeRoutes(e *echo.Echo, userController *controllers.UserController, productController *controllers.ProductController, challengeController *controllers.ChallengeController, rewardController *controllers.RewardController) {
 
 	// Middleware for JWT Authentication

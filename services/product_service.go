@@ -5,7 +5,6 @@ import (
 	"green_environment_app/repositories"
 )
 
-// ProductService defines methods to interact with product-related operations
 type ProductService interface {
 	CreateProduct(product *models.Product) error
 	GetAllProducts() ([]models.Product, error)
@@ -14,12 +13,10 @@ type ProductService interface {
 	DeleteProduct(id uint) error
 }
 
-// productService implements ProductService interface
 type productService struct {
 	repo repositories.ProductRepository
 }
 
-// NewProductService creates a new instance of ProductService
 func NewProductService(repo repositories.ProductRepository) ProductService {
 	return &productService{repo: repo}
 }

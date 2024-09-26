@@ -6,7 +6,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// discussion methods
 type DiscussionRepository interface {
 	Save(discussion *models.Discussion) error
 	FindAll() ([]models.Discussion, error)
@@ -19,7 +18,6 @@ type discussionRepository struct {
 	db *gorm.DB
 }
 
-// creating a new instance discussion repository
 func NewDiscussionRepository(db *gorm.DB) DiscussionRepository {
 	return &discussionRepository{db}
 }

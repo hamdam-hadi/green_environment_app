@@ -6,7 +6,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// methods of challenge
 type ChallengeRepository interface {
 	Save(challenge *models.Challenge) error
 	FindAll() ([]models.Challenge, error)
@@ -15,12 +14,10 @@ type ChallengeRepository interface {
 	Delete(id uint) error
 }
 
-// challenge interface
 type challengeRepository struct {
 	db *gorm.DB
 }
 
-// creating new instance challenge
 func NewChallengeRepository(db *gorm.DB) ChallengeRepository {
 	return &challengeRepository{db}
 }

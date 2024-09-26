@@ -5,7 +5,6 @@ import (
 	"green_environment_app/repositories"
 )
 
-// UserService defines methods to interact with user-related operations
 type UserService interface {
 	Register(user *models.User) error
 	Login(email string) (*models.User, error)
@@ -13,12 +12,10 @@ type UserService interface {
 	UpdateUser(user *models.User) error
 }
 
-// userService implements the UserService interface
 type userService struct {
 	repo repositories.UserRepository
 }
 
-// NewUserService creates a new instance of UserService
 func NewUserService(repo repositories.UserRepository) UserService {
 	return &userService{repo: repo}
 }

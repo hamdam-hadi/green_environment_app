@@ -5,7 +5,6 @@ import (
 	"green_environment_app/repositories"
 )
 
-// TransactionService defines methods to interact with transaction-related operations
 type TransactionService interface {
 	CreateTransaction(transaction *models.Transaction) error
 	GetTransactionByID(id uint) (*models.Transaction, error)
@@ -13,12 +12,10 @@ type TransactionService interface {
 	DeleteTransaction(id uint) error
 }
 
-// transactionService implements the TransactionService interface
 type transactionService struct {
 	repo repositories.TransactionRepository
 }
 
-// NewTransactionService creates a new instance of TransactionService
 func NewTransactionService(repo repositories.TransactionRepository) TransactionService {
 	return &transactionService{repo: repo}
 }

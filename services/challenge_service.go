@@ -5,7 +5,6 @@ import (
 	"green_environment_app/repositories"
 )
 
-// ChallengeService defines methods to interact with challenge-related operations
 type ChallengeService interface {
 	CreateChallenge(challenge *models.Challenge) error
 	GetAllChallenges() ([]models.Challenge, error)
@@ -14,12 +13,10 @@ type ChallengeService interface {
 	DeleteChallenge(id uint) error
 }
 
-// challengeService implements ChallengeService interface
 type challengeService struct {
 	repo repositories.ChallengeRepository
 }
 
-// NewChallengeService creates a new instance of ChallengeService
 func NewChallengeService(repo repositories.ChallengeRepository) ChallengeService {
 	return &challengeService{repo: repo}
 }

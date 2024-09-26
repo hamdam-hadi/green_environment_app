@@ -5,7 +5,6 @@ import (
 	"green_environment_app/repositories"
 )
 
-// DiscussionService defines methods to interact with discussion-related operations
 type DiscussionService interface {
 	CreateDiscussion(discussion *models.Discussion) error
 	GetAllDiscussions() ([]models.Discussion, error)
@@ -14,12 +13,10 @@ type DiscussionService interface {
 	DeleteDiscussion(id uint) error
 }
 
-// discussionService implements DiscussionService interface
 type discussionService struct {
 	repo repositories.DiscussionRepository
 }
 
-// NewDiscussionService creates a new instance of DiscussionService
 func NewDiscussionService(repo repositories.DiscussionRepository) DiscussionService {
 	return &discussionService{repo: repo}
 }

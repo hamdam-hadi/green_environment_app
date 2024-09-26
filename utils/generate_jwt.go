@@ -1,4 +1,3 @@
-// utils/generate_jwt.go
 package utils
 
 import (

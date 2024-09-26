@@ -5,7 +5,6 @@ import (
 	"green_environment_app/repositories"
 )
 
-// RewardService defines methods to interact with reward-related operations
 type RewardService interface {
 	CreateReward(reward *models.Reward) error
 	GetAllRewards() ([]models.Reward, error)
@@ -14,12 +13,10 @@ type RewardService interface {
 	DeleteReward(id uint) error
 }
 
-// rewardService implements RewardService interface
 type rewardService struct {
 	repo repositories.RewardRepository
 }
 
-// NewRewardService creates a new instance of RewardService
 func NewRewardService(repo repositories.RewardRepository) RewardService {
 	return &rewardService{repo: repo}
 }
