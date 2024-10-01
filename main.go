@@ -8,17 +8,18 @@ import (
 	"green_environment_app/routes"
 	"green_environment_app/services"
 	"green_environment_app/utils"
+	"os"
 
 	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func InitializeDatabase() (*gorm.DB, error) {
-	var dsn string = fmt.Sprintf(
+	/*var dsn string = fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		utils.GetConfig("DB_USER"),
 		utils.GetConfig("DB_PASSWORD"),
@@ -31,6 +32,28 @@ func InitializeDatabase() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	return db, nil*/
+	var dsn string = fmt.Sprintf(
+		"user=%s password=%s host=%s port=%s dbname=%s",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+		os.Getenv("DB_NAME"),
+	)
+
+	pgConfig := postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+	})
+	db, err := gorm.Open(pgConfig, &gorm.Config{})
+
+	if err != nil {
+		log.Fatalf("error when connecting to the database: %s\n", err)
+	}
+
+	log.Println("connected to the database")
+
 	return db, nil
 }
 
@@ -94,9 +117,10 @@ func main() {
 
 	// Initialize routes
 	routes.InitializeRoutes(e, userController, productController, challengeController, rewardController)
+	var port string = fmt.Sprintf(":%s", os.Getenv("PORT"))
 
 	// Start the server
-	if err := e.Start(":2024"); err != nil {
+	if err := e.Start(port); err != nil {
 		log.Fatalf("could not start the server: %v", err)
 	}
 }
@@ -109,7 +133,7 @@ func login(c echo.Context) error {
 
 		token, err := utils.GenerateJWT(1, utils.JWTOptions{
 			ExpiresDuration: 24,
-			SecretKey:       utils.GetConfig("SECRET_KEY"),
+			SecretKey:       os.Getenv("SECRET_KEY"),
 		})
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to generate JWT"})
