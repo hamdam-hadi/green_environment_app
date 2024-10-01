@@ -6,6 +6,7 @@ import (
 	"green_environment_app/services"
 	"green_environment_app/utils"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -21,7 +22,7 @@ func NewUserController(us services.UserService) *UserController {
 	return &UserController{
 		UserService: us,
 		JWTConfig: middleware.JWTConfig{
-			SigningKey: []byte(utils.GetConfig("SECRET_KEY")),
+			SigningKey: []byte(os.Getenv("SECRET_KEY")),
 		},
 	}
 }
@@ -62,7 +63,7 @@ func (uc *UserController) LoginUser(c echo.Context) error {
 
 	// Use utils.JWTOptions directly instead of models.JWTOptions
 	jwtOptions := utils.JWTOptions{
-		SecretKey:       utils.GetConfig("SECRET_KEY"),
+		SecretKey:       os.Getenv("SECRET_KEY"),
 		ExpiresDuration: 72, // Set token expiration duration in hours
 	}
 

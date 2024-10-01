@@ -3,7 +3,7 @@ package routes
 import (
 	"green_environment_app/controllers"
 	mid "green_environment_app/middleware"
-	"green_environment_app/utils"
+	"os"
 
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -18,7 +18,7 @@ func InitializeRoutes(e *echo.Echo, userController *controllers.UserController, 
 	e.Use(middleware.Recover())
 
 	authconfig := mid.JWTConfig{
-		SecretKey: utils.GetConfig("SECRET_KEY"),
+		SecretKey: os.Getenv("SECRET_KEY"),
 	}
 
 	// Routes for Users

@@ -3,8 +3,8 @@ package database
 import (
 	"fmt"
 	"green_environment_app/models"
-	"green_environment_app/utils"
 	"log"
+	"os"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -15,11 +15,11 @@ var DB *gorm.DB
 // InitializeDatabase sets up the connection to the database
 func InitializeDatabase() {
 	// Get database credentials from the environment
-	dbUser := utils.GetConfig("DB_USER")
-	dbPassword := utils.GetConfig("DB_PASSWORD")
-	dbHost := utils.GetConfig("DB_HOST")
-	dbPort := utils.GetConfig("DB_PORT")
-	dbName := utils.GetConfig("DB_NAME")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
 
 	// Construct the DSN (Data Source Name)
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",

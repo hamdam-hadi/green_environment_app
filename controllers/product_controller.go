@@ -3,8 +3,8 @@ package controllers
 import (
 	"green_environment_app/models"
 	"green_environment_app/services"
-	"green_environment_app/utils"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -20,7 +20,7 @@ func NewProductController(ps services.ProductService) *ProductController {
 	return &ProductController{
 		ProductService: ps,
 		JWTConfig: middleware.JWTConfig{
-			SigningKey: []byte(utils.GetConfig("SECRET_KEY")),
+			SigningKey: []byte(os.Getenv("SECRET_KEY")),
 		},
 	}
 }
