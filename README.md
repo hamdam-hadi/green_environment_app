@@ -5,20 +5,20 @@ Green_Environment_APP is an echo-friendly application designed to encourage user
 
 ### Features
 
-__User__
- 1- Register and Login:
+# User
+ __Register and Login:__
  Users can create an account and authenticate with JWT based login.
- 2- purchase Products:
+ __purchase Products:__
  Access a marketplace to purchase eco-friendly products that support a green lifestyle.
- 3- Participate in Challenges: 
+ __Participate in Challenges:__ 
  Users can browse and take part in various environmental challenges, earning rewards for successfuly completion.
 
-__Admin__
- 1- User Management: 
+# Admin
+ __User Management:__
  Admins can view, edit, or delete user accounts.
- 2- Product and Reward Management:
+ __Product and Reward Management:__
  Admins can add, update, or delete products and rewards in the system.
- 3- Challenge Moderation: 
+ __Challenge Moderation:__ 
  Admins can create, update, or delete environment related challenges.
 
  #### Tech Stacks
