@@ -43,7 +43,7 @@ Green_Environment_APP is an echo-friendly application designed to encourage user
  . Git
 
  - Steps
- . Clone the repository: git clone https://github.com/hamdam-hadi/green_environment_app.git cd green_environment_app
+ . Clone the repository: git clone https://github.com/hamdam-hadi/green_environment_app cd green_environment_app
  . Set up environment variables"
  DB_USER=root
  DB_PASSWORD=
