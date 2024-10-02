@@ -5,7 +5,7 @@ Green_Environment_APP is an echo-friendly application designed to encourage user
 
 ### Features
 
-# User
+__User__
  __Register and Login:__
  Users can create an account and authenticate with JWT based login.
  __purchase Products:__
@@ -13,14 +13,11 @@ Green_Environment_APP is an echo-friendly application designed to encourage user
  __Participate in Challenges:__ 
  Users can browse and take part in various environmental challenges, earning rewards for successfuly completion.
 
-# Admin
- __User Management:__
- Admins can view, edit, or delete user accounts.
- __Product and Reward Management:__
- Admins can add, update, or delete products and rewards in the system.
- __Challenge Moderation:__ 
- Admins can create, update, or delete environment related challenges.
-
+__Admin__
+ .__User Management:__ Admins can view, edit, or delete user accounts.
+ .__Product and Reward Management:__ Admins can add, update, or delete products and rewards in the system.
+ .__Challenge Moderation:__ Admins can create, update, or delete environment related challenges.
+ 
  #### Tech Stacks
  __Golang__: Backend programming language used for building the application.
  __Echo Framework__: Web framework for Go used to create the RESTful API.
@@ -35,7 +32,7 @@ Green_Environment_APP is an echo-friendly application designed to encourage user
  The API docomentation was created using Postman. You can access the documentation for all the avilable routes here:
  https://documenter.getpostman.com/view/37379531/2sAXxJib3c
 
- # Entity Relationship Diagram (ERD)
+ ###### Entity Relationship Diagram (ERD)
  Below is the ERD for the project:
  ![Project_ERD](https://github.com/user-attachments/assets/148f5306-668f-423f-bf2d-459ff6a3b70b)
 
