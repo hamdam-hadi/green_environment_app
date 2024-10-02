@@ -43,6 +43,7 @@ __User__
 
  # Entity Relationship Diagram (ERD)
  Below is the ERD for the project:
+![Project_ERD](https://github.com/user-attachments/assets/e8e63eb8-7212-4f43-a6bb-874e2faea686)
 
 
  # Setup
