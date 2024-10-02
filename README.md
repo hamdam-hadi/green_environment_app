@@ -63,13 +63,13 @@ __User__
 
  - Set up environment variables
 
- DB_USER=root
+ DB_USER=
  DB_PASSWORD=
- DB_HOST=localhost
- DB_PORT=3306
- DB_NAME=green_environment_app
- JWT_SECRET=secret
- PORT=2024
+ DB_HOST=
+ DB_PORT=
+ DB_NAME=
+ JWT_SECRET=
+ PORT=
 
  - Install dependencies: You can install all 
 
