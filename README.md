@@ -27,7 +27,7 @@ Green_Environment_APP is an echo-friendly application designed to encourage user
 
  # API Documentation
  The API docomentation was created using Postman. You can access the documentation for all the avilable routes here:
- https://documenter.getpostman.com/view/37379531/2sAXxJib3c
+ ### https://documenter.getpostman.com/view/37379531/2sAXxJib3c
 
  # Entity Relationship Diagram (ERD)
  Below is the ERD for the project:
